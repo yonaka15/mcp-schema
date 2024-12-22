@@ -24,6 +24,7 @@ This repository (`mcp-schema`) contains a **Rust port** of the official [Model C
    - Creating custom AI workflows that integrate multiple tools.
 
 4. **Benefits**
+
    - Maintains clear security boundaries while unifying AI functionality across different applications.
    - Provides standardized interfaces, making it easier to connect disparate systems.
    - Ensures secure, bidirectional connections between data sources and AI tools.
@@ -67,6 +68,23 @@ These features are particularly valuable for web and microservice architectures,
    git clone https://github.com/yonaka15/mcp-schema.git
    cd mcp-schema
    ```
+
+## Installation
+
+### From crates.io
+
+You can also add **mcp-schema** from [crates.io](https://crates.io/crates/mcp-schema):
+
+```bash
+cargo add mcp-schema
+```
+
+Or add **mcp-schema** as a dependency in your project’s `Cargo.toml`:
+
+```toml
+[dependencies]
+mcp-schema = "0.1.2"
+```
 
 ## License
 
