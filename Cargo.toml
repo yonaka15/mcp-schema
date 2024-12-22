@@ -1,6 +1,6 @@
 [package]
 name = "mcp-schema"
-version = "0.1.0"
+version = "0.1.2"
 edition = "2021"
 authors = ["yonaka"]
 description = "Rust port of the Model Context Protocol (MCP) schema originally written in TypeScript."
