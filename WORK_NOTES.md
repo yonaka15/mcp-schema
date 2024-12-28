@@ -43,6 +43,7 @@ src/
 - `base.rs`に`PingParams`型を追加
 - `client.rs`から未使用の`ListToolsResult`インポートを削除
 - コンパイルエラーとwarningの解決
+- `initialization.rs`の`ClientCapabilities`と`RootsCapability`に`Default`トレイトを追加
 
 ## これからやるべき作業
 
