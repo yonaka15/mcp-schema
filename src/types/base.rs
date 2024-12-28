@@ -71,6 +71,10 @@ pub enum ProgressToken {
 /// A cursor for pagination.
 pub type Cursor = String;
 
+/// Parameters for ping request - empty struct as ping takes no parameters
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct PingParams {}
+
 /// A generic JSON-RPC request.
 ///
 /// # Type Parameters

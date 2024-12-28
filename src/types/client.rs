@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use super::base::{RequestId, MCPNotificationParams, PingParams};
 use super::initialization::InitializeParams;
-use super::tools::{CallToolParams, ListToolsResult};
+use super::tools::{CallToolParams};  // Removed ListToolsResult
 use super::resources::{ReadResourceParams, SubscribeParams, UnsubscribeParams};
 use super::prompts::{GetPromptParams};
 use super::logging::SetLevelParams;
