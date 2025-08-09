@@ -300,7 +300,7 @@ pub struct ProgressNotificationParams {
 }
 
 /// A structure for request parameters that may involve pagination.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct PaginatedParams {
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -921,6 +921,7 @@ pub enum ClientRequest {
         #[serde(rename = "jsonrpc")]
         json_rpc: String,
         id: RequestId,
+        #[serde(default)]
         params: PaginatedParams,
     },
     #[serde(rename = "resources/list")]
@@ -928,6 +929,7 @@ pub enum ClientRequest {
         #[serde(rename = "jsonrpc")]
         json_rpc: String,
         id: RequestId,
+        #[serde(default)]
         params: PaginatedParams,
     },
     #[serde(rename = "resources/templates/list")]
@@ -935,6 +937,7 @@ pub enum ClientRequest {
         #[serde(rename = "jsonrpc")]
         json_rpc: String,
         id: RequestId,
+        #[serde(default)]
         params: PaginatedParams,
     },
     #[serde(rename = "resources/read")]
@@ -970,6 +973,7 @@ pub enum ClientRequest {
         #[serde(rename = "jsonrpc")]
         json_rpc: String,
         id: RequestId,
+        #[serde(default)]
         params: PaginatedParams,
     },
 }
