@@ -643,6 +643,10 @@ pub struct CallToolResult {
     #[serde(rename = "_meta", skip_serializing_if = "Option::is_none")]
     pub meta: Option<HashMap<String, Value>>,
     pub content: Vec<PromptContent>,
+    
+    /// Structured content that conforms to the tool's output schema.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub structured_content: Option<Value>,
 
     /// True if the tool call ended in an error.
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -652,14 +656,36 @@ pub struct CallToolResult {
     pub extra: HashMap<String, Value>,
 }
 
+/// Annotations that describe tool behavior hints.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ToolAnnotations {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub title: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub read_only_hint: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destructive_hint: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub idempotent_hint: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub open_world_hint: Option<bool>,
+}
+
 /// Defines a tool that can be invoked by the client.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Tool {
     pub name: String,
     #[serde(skip_serializing_if = "Option::is_none")]
+    pub title: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     pub input_schema: ToolInputSchema,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_schema: Option<Value>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub annotations: Option<ToolAnnotations>,
 
     #[serde(flatten)]
     pub extra: HashMap<String, Value>,
@@ -876,6 +902,43 @@ pub struct Root {
     pub extra: HashMap<String, Value>,
 }
 
+/// Parameters for the elicitation/create request.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ElicitationCreateParams {
+    /// The prompt message to display to the user.
+    pub message: String,
+    
+    /// A JSON Schema defining the structure of the expected user response.
+    pub requested_schema: Value,
+    
+    #[serde(flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+/// Result from the elicitation/create request.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ElicitationCreateResult {
+    /// The action taken by the user.
+    pub action: ElicitationAction,
+    
+    /// The user's response conforming to the requested schema (if accepted).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content: Option<Value>,
+    
+    #[serde(flatten)]
+    pub extra: HashMap<String, Value>,
+}
+
+/// Possible actions for elicitation responses.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum ElicitationAction {
+    Accept,
+    Reject,
+    Cancel,
+}
 /// A union of all possible client requests. The `method` field identifies the variant.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(tag = "method", rename_all = "camelCase")]
@@ -971,6 +1034,13 @@ pub enum ClientRequest {
         json_rpc: String,
         id: RequestId,
         params: PaginatedParams,
+    },
+    #[serde(rename = "elicitation/create")]
+    ElicitationCreate {
+        #[serde(rename = "jsonrpc")]
+        json_rpc: String,
+        id: RequestId,
+        params: ElicitationCreateParams,
     },
 }
 
@@ -1100,4 +1170,5 @@ pub enum ServerResult {
     ReadResource(ReadResourceResult),
     CallTool(CallToolResult),
     ListTools(ListToolsResult),
+    ElicitationCreate(ElicitationCreateResult),
 }
